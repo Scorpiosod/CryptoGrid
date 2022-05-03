@@ -22,8 +22,8 @@ class MainWindow:
         self.walletAddress = StringVar()
         Entry(window, textvariable=self.walletAddress, justify=RIGHT).grid(row=3, column=2)
 
-        btSaveKeys = Button(window, text="Save Keys", command=self.saveKeys).grid(row=4, column=1, sticky=E)
-        btSearchTx = Button(window, text="Search Transactions", command=self.searchTx).grid(row=4, column=2, sticky=E)
+        btSaveKeys = Button(window, text="Save Keys", command=self.save_keys).grid(row=4, column=1, sticky=E)
+        btSearchTx = Button(window, text="Search Transactions", command=self.search_tx).grid(row=4, column=2, sticky=E)
 
         self.frame1 = Frame(window)
         self.frame1.grid(row=5, column=1, columnspan=2, sticky=W)
@@ -37,7 +37,7 @@ class MainWindow:
         window.mainloop()  # Create an event loop
 
 
-    def saveKeys(self):
+    def save_keys(self):
         DecodeData.api_key = self.apiKey.get()
         DecodeData.my_address = self.walletAddress.get()
         DecodeData.infura_url = self.infuraKey.get()
@@ -47,9 +47,9 @@ class MainWindow:
 
 
 
-    def searchTx(self):
-        txs = DecodeData.getTxDetails(5)
-        txs = DecodeData.processTxDetails(txs)
+    def search_tx(self):
+        txs = DecodeData.get_tx_details(5)
+        txs = DecodeData.process_tx_details(txs)
         for key, value in txs.items():
             transaction = f"#{value[0]}: Hash({key}), method = {value[1]}, ETH amount {value[2]}"
             self.text.insert(END, transaction + "\n")

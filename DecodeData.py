@@ -15,13 +15,13 @@ transfer_hex = ["0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b
 
 
 # Create CSV file for all transaction in a wallet address
-def createCSV(tx):
+def create_csv(tx):
     df = pd.DataFrame(tx["result"])
     df.to_csv("testwallet.csv")
 
 
 # Create .txt file for all transaction from search result
-def createFile(filename, tx):
+def create_file(filename, tx):
     with open(filename, "w") as file:
         if "result" in tx:
             if type(tx["result"]) == list:
@@ -41,9 +41,9 @@ def createFile(filename, tx):
 
 # Return a dictionary of transactions
 # Return format: {transaction hash: [index, method used, amount transfered]}
-def getTxDetails(count):
-    web3 = eth.web3CreateLink(infura_url)
-    tx = eth.getTxByAddress(my_address, api_key, count=count)
+def get_tx_details(count):
+    web3 = eth.web3_create_link(infura_url)
+    tx = eth.get_tx_by_address(my_address, api_key, count=count)
     tx = tx["result"]
     txs_details = {}
     for tx, i in zip(tx, range(len(tx)+1)):
@@ -51,8 +51,8 @@ def getTxDetails(count):
         # If input = 0x, there is no input data
         if tx["input"] != "0x":
             contract_address = web3.toChecksumAddress(tx["to"])
-            contract = eth.web3Contract(web3, contract_address, api_key)
-            method = eth.web3ContractMethod(contract, tx)
+            contract = eth.web3_contract(web3, contract_address, api_key)
+            method = eth.web3_contract_method(contract, tx)
             # print(f"{i + 1}. {method}")
         else:
             method = "transfer"
@@ -69,11 +69,11 @@ def getTxDetails(count):
 
 
 # To decode logs into readable transactions data
-def processLogDetails(web3, log):
+def process_log_details(web3, log):
     # Free account for etherscan.io api only can do 5 search per second, this pause is to avoid overuse search limit
     time.sleep(0.3)
     transaction = Transaction()
-    contract = eth.web3Contract(web3, log["address"], api_key)
+    contract = eth.web3_contract(web3, log["address"], api_key)
     events = {}
     abi_events = [abi for abi in contract.abi if abi["type"] == "event"]
     for event in abi_events:
@@ -101,12 +101,12 @@ def processLogDetails(web3, log):
 
 
 #to decode transactions
-def processTxDetails(txs_details={}):
-    web3 = eth.web3CreateLink(infura_url)
+def process_tx_details(txs_details={}):
+    web3 = eth.web3_create_link(infura_url)
     for key, value in txs_details.items():
         # To show processing progress
         print(f"Processing tx #{value[0]}")
-        receipt = eth.web3GetReceipt(web3, key)
+        receipt = eth.web3_get_receipt(web3, key)
         transactions = []
         #status 0x0 means failed transaction
         if receipt["status"] == 0:
@@ -126,9 +126,9 @@ def processTxDetails(txs_details={}):
                     transactions.append(transaction)
             else:
                 # If the receit had logs, then decode the logs one at a time
-                logs = eth.web3GetLogs(web3, key)
+                logs = eth.web3_get_logs(web3, key)
                 for log in logs:
-                    transaction = processLogDetails(web3, log)
+                    transaction = process_log_details(web3, log)
                     # Making sure valid transaction detail has returned
                     if transaction.method != "":
                         transactions.append(transaction)
@@ -137,8 +137,8 @@ def processTxDetails(txs_details={}):
 
 
 if __name__ == "__main__":
-    txs = getTxDetails(5)
-    txs = processTxDetails(txs)
+    txs = get_tx_details(5)
+    txs = process_tx_details(txs)
     for key, value in txs.items():
         print(f"#{value[0]}: Hash({key}), method = {value[1]}, ETH amount {value[2]}")
         for i in value[3]:
