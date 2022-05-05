@@ -2,6 +2,8 @@
 
 This is an app that can scan the transactions with crypto wallet address and produce organized and readable data for each transaction.
 
+Run the Interface.py to open the app.
+
 (THE APP IS STILL WORKING IN PROGRESS)
 
 User will need the an API key from the following website:
