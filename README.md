@@ -2,6 +2,12 @@
 
 This is an app that can scan the transactions with crypto wallet address and produce organized and readable data for each transaction.
 
-(STILL WORK IN PROGRESS)
+(THE APP IS STILL WORKING IN PROGRESS)
+
+User will need the an API key from the following website:
+- etherscan.io
+- infura.io
+
+Function included so far:
 - only work for ether address for now
-- will add function to help calculate crypto sales profit/loss
+- can return transaction detail on range of transaction (limited to 30 each search)
