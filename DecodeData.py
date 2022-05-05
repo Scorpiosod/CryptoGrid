@@ -41,9 +41,9 @@ def create_file(filename, tx):
 
 # Return a dictionary of transactions
 # Return format: {transaction hash: [index, method used, amount transfered]}
-def get_tx_details(count):
+def get_tx_details(start, count):
     web3 = eth.web3_create_link(infura_url)
-    tx = eth.get_tx_by_address(my_address, api_key, count=count)
+    tx = eth.get_tx_by_address(my_address, api_key, start=start, count=count)
     tx = tx["result"]
     txs_details = {}
     for tx, i in zip(tx, range(len(tx)+1)):
@@ -137,7 +137,7 @@ def process_tx_details(txs_details={}):
 
 
 if __name__ == "__main__":
-    txs = get_tx_details(5)
+    txs = get_tx_details(1, 5)
     txs = process_tx_details(txs)
     for key, value in txs.items():
         print(f"#{value[0]}: Hash({key}), method = {value[1]}, ETH amount {value[2]}")

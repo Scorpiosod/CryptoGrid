@@ -59,11 +59,11 @@ class MainWindow:
 
 
     def search_tx(self):
-        range = self.end_tx.get() - self.start_tx.get()
+        range = self.end_tx.get() - self.start_tx.get() + 1
         if range > 30:
             messagebox.showwarning("Warning", "Range is too large, must be less than 30")
         else:
-            txs = DecodeData.get_tx_details(range)
+            txs = DecodeData.get_tx_details(self.start_tx.get(), range)
             txs = DecodeData.process_tx_details(txs)
             for key, value in txs.items():
                 transaction = f"#{value[0]}: Hash({key}), method = {value[1]}, ETH amount {value[2]}"

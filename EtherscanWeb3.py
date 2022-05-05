@@ -47,7 +47,7 @@ def web3_contract_method(contract, tx):
 
 # Etherscan api
 # To find all the transactions in a wallet address
-def get_tx_by_address(address, api_key, start=1, count=10):
+def get_tx_by_address(address, api_key, start=1, count=1):
     url = ("https://api.etherscan.io/api"
             "?module=account"
             "&action=txlist"
